@@ -1,6 +1,6 @@
 # A tool to calculate perplexity of a flair vectors on Brown-UK corpus
 
-# Usage
+## Usage
  - Install deps: `pip install flair`
  - Clone or update the BRUK: `git clone https://github.com/brown-uk/corpus.git`
  - Combine all texts into one: `python prepare_corpus.py "corpus/data/good/*.txt" > /tmp/bruk.paras.combined.txt`
