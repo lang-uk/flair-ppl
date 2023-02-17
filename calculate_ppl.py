@@ -2,8 +2,8 @@ import sys
 import csv
 import argparse
 from hashlib import sha1
-
 from pathlib import Path
+from tqdm import tqdm
 from flair.models.language_model import LanguageModel
 
 if __name__ == "__main__":
@@ -33,12 +33,17 @@ if __name__ == "__main__":
     w = csv.DictWriter(args.outfile, fieldnames=["id", "sentence", "ppl", "sentence_len"])
     w.writeheader()
 
-    for sentence in map(str.strip, args.infile):
-        w.writerow(
-            {
-                "id": sha1(sentence.encode("utf-8")).hexdigest(),
-                "sentence": sentence,
-                "ppl": lm.calculate_perplexity(sentence),
-                "sentence_len": len(sentence),
-            }
-        )
+    for i, sentence in enumerate(tqdm(map(str.strip, args.infile))):
+        if not sentence:
+            continue
+        try:
+            w.writerow(
+                {
+                    "id": sha1(sentence.encode("utf-8")).hexdigest(),
+                    "sentence": sentence,
+                    "ppl": lm.calculate_perplexity(sentence),
+                    "sentence_len": len(sentence),
+                }
+            )
+        except Exception:
+            print("WTF", i, sentence)
